@@ -1,4 +1,4 @@
-export const APP_PACKAGE = 'com.example.android.apis';
+export const APP_PACKAGE = 'io.appium.android.apis';
 
 function escapeUiSelectorValue(value) {
   return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');

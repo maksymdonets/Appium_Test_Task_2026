@@ -5,6 +5,7 @@ import { getApiDemosAppPath, ensureApiDemosApp } from './src/support/app.js';
 import {
   allureResultsDir,
   androidConfig,
+  apkPackage,
   appiumBinary,
   junitDir,
   pageSourceDir,
@@ -31,7 +32,7 @@ export const config = {
       'appium:deviceName': androidConfig.deviceName,
       'appium:platformVersion': androidConfig.platformVersion,
       'appium:avd': androidConfig.avd,
-      'appium:appPackage': 'com.example.android.apis',
+      'appium:appPackage': apkPackage,
       'appium:appActivity': '.ApiDemos',
       'appium:appWaitActivity': androidConfig.appWaitActivity,
       'appium:autoGrantPermissions': true,

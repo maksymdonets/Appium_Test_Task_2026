@@ -17,7 +17,7 @@ export const pageSourceDir = resolve(artifactsRoot, 'page-source');
 export const junitDir = resolve(artifactsRoot, 'junit');
 export const allureResultsDir = resolve(artifactsRoot, 'allure-results');
 
-export const apkPackage = 'com.example.android.apis';
+export const apkPackage = 'io.appium.android.apis';
 
 export const appiumBinary =
   process.env.APPIUM_BINARY ||
