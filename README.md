@@ -9,7 +9,6 @@ Production-ready Appium + WebdriverIO suite for the Android `ApiDemos-debug.apk`
 - Automatic APK download with redirect-safe extraction and local caching
 - Failure artifacts for CI and local debugging: screenshots, page source, JUnit XML, Allure results
 - GitHub Actions workflow that boots an Android emulator and runs the same suite as local execution
-- No AI runtime dependency or cloud AI integration in the test project
 
 ## Project structure
 
