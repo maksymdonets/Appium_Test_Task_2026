@@ -12,6 +12,9 @@ function firstExistingPath(candidates) {
 
 export const projectRoot = process.cwd();
 export const artifactsRoot = resolve(projectRoot, 'artifacts');
+export const cacheRoot = resolve(projectRoot, '.cache');
+export const localAndroidSdkRoot = resolve(cacheRoot, 'android-sdk');
+export const localAndroidAvdRoot = resolve(cacheRoot, 'android-avd');
 export const screenshotsDir = resolve(artifactsRoot, 'screenshots');
 export const pageSourceDir = resolve(artifactsRoot, 'page-source');
 export const junitDir = resolve(artifactsRoot, 'junit');
@@ -34,7 +37,7 @@ export const tarBinary =
 export const androidConfig = {
   deviceName: process.env.ANDROID_DEVICE_NAME || 'Android Emulator',
   platformVersion: process.env.ANDROID_PLATFORM_VERSION || undefined,
-  avd: process.env.ANDROID_AVD_NAME || undefined,
+  avd: process.env.ANDROID_AVD_NAME || 'apidemos-local-api35',
   appWaitActivity: process.env.ANDROID_APP_WAIT_ACTIVITY || `${apkPackage}.*`
 };
 

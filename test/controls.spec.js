@@ -11,9 +11,10 @@ describe("ApiDemos controls screen", () => {
     await homePage.openViews();
     await viewsPage.assertLoaded();
     await viewsPage.openControls();
+    await controlsPage.openLightTheme();
 
     await controlsPage.assertLoaded();
-    await controlsPage.fillForm({ firstValue: "Alpha", secondValue: "Beta" });
+    await controlsPage.fillForm({ firstValue: "Alpha" });
     await controlsPage.setCheckboxes(true);
     await controlsPage.selectRadio(1);
     await controlsPage.setToggles(true);
@@ -22,7 +23,6 @@ describe("ApiDemos controls screen", () => {
 
     const state = await controlsPage.captureState();
     await expect(state.firstInput).toBe("Alpha");
-    await expect(state.secondInput).toBe("Beta");
     await expect(state.checkbox1).toBe(true);
     await expect(state.checkbox2).toBe(true);
     await expect(state.radio1).toBe(true);

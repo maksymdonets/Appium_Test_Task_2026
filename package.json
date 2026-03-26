@@ -8,11 +8,17 @@
   },
   "scripts": {
     "app:download": "node ./scripts/ensure-app.mjs",
+    "android:setup": "node ./scripts/run-local.mjs --setup-only",
+    "android:emulator": "node ./scripts/run-local.mjs --emulator-only --headed",
+    "android:emulator:headless": "node ./scripts/run-local.mjs --emulator-only --headless",
+    "android:kill": "node ./scripts/run-local.mjs --kill-emulator",
     "doctor:android": "node ./scripts/doctor-android.mjs",
     "pretest": "node ./scripts/ensure-app.mjs",
-    "test": "wdio run ./wdio.conf.js",
-    "test:ci": "wdio run ./wdio.conf.js",
-    "test:smoke": "wdio run ./wdio.conf.js --spec ./test/navigation.spec.js",
+    "test": "node ./scripts/run-local.mjs --headed",
+    "test:headless": "node ./scripts/run-local.mjs --headless",
+    "test:ci": "node ./scripts/run-local.mjs --headless",
+    "test:smoke": "node ./scripts/run-local.mjs --spec ./test/navigation.spec.js",
+    "test:smoke:headless": "node ./scripts/run-local.mjs --headless --spec ./test/navigation.spec.js",
     "report:allure": "allure generate ./artifacts/allure-results --clean -o ./artifacts/allure-report"
   },
   "devDependencies": {

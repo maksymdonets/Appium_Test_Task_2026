@@ -5,14 +5,17 @@ const controlsPage = {
   ...basePage,
 
   elements: {
+    themes: {
+      light: () => controlsPage.waitForText("1. Light Theme"),
+    },
     actions: {
       saveButton: () => $(resourceId("button")),
       disabledSaveButton: () => $(resourceId("button_disabled")),
     },
     form: {
       firstInput: () => $(resourceId("edit")),
-      secondInput: () => $(resourceId("edit2")),
       spinner: () => $(resourceId("spinner1")),
+      spinnerValue: async () => (await controlsPage.elements.form.spinner()).$('android.widget.TextView'),
     },
     toggles: {
       checkbox1: () => $(resourceId("check1")),
@@ -24,9 +27,13 @@ const controlsPage = {
       star: () => $(resourceId("star")),
     },
     content: {
-      scrollViewFooter: () => controlsPage.waitForText("(And all inside of a ScrollView!)"),
+      bottomMarker: () => controlsPage.waitForText("textColorPrimary"),
       spinnerOption: (label) => $(textSelector(label)),
     },
+  },
+
+  async openLightTheme() {
+    await this.tap(this.elements.themes.light());
   },
 
   async assertLoaded() {
@@ -35,9 +42,8 @@ const controlsPage = {
     await this.waitForVisible(this.elements.form.spinner());
   },
 
-  async fillForm({ firstValue, secondValue }) {
+  async fillForm({ firstValue }) {
     await this.type(this.elements.form.firstInput(), firstValue);
-    await this.type(this.elements.form.secondInput(), secondValue);
   },
 
   async setCheckboxes(checked = true) {
@@ -82,20 +88,21 @@ const controlsPage = {
   },
 
   async assertBottomTextVisible() {
-    await this.elements.content.scrollViewFooter();
+    await this.elements.content.bottomMarker();
   },
 
   async captureState() {
+    const spinnerValue = await this.elements.form.spinnerValue();
+
     return {
       firstInput: await this.getTextValue(this.elements.form.firstInput()),
-      secondInput: await this.getTextValue(this.elements.form.secondInput()),
       checkbox1: await this.isChecked(this.elements.toggles.checkbox1()),
       checkbox2: await this.isChecked(this.elements.toggles.checkbox2()),
       radio1: await this.isChecked(this.elements.toggles.radio1()),
       radio2: await this.isChecked(this.elements.toggles.radio2()),
       toggle1: await this.isChecked(this.elements.toggles.toggle1()),
       toggle2: await this.isChecked(this.elements.toggles.toggle2()),
-      spinner: await this.getTextValue(this.elements.form.spinner()),
+      spinner: await this.getTextValue(spinnerValue),
     };
   },
 };

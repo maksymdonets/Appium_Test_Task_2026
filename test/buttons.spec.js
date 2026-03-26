@@ -26,8 +26,8 @@ describe("ApiDemos buttons screen", () => {
     await buttonsPage.assertLoaded();
 
     const labels = await buttonsPage.readLabels();
-    await expect(labels.toggle).toContain("Toggle");
     await expect(labels.normal).toContain("Normal");
     await expect(labels.small).toContain("Small");
+    await expect(["OFF", "ON"]).toContain(labels.toggle);
   });
 });

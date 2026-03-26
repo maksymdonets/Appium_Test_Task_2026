@@ -13,6 +13,7 @@ import {
   wdioConfig
 } from './src/config/environment.js';
 import { ensureDirectory, sanitizeFileName } from './src/support/artifacts.js';
+import { dismissSystemDialogs } from './src/support/system-dialogs.js';
 
 export const config = {
   runner: 'local',
@@ -81,8 +82,17 @@ export const config = {
     ensureDirectory(allureResultsDir);
     await ensureApiDemosApp();
   },
+  async before() {
+    await dismissSystemDialogs();
+  },
   async beforeTest() {
-    await browser.reset();
+    await browser.startActivity({
+      appPackage: apkPackage,
+      appActivity: '.ApiDemos',
+      appWaitPackage: apkPackage,
+      appWaitActivity: `${apkPackage}.*`
+    });
+    await dismissSystemDialogs();
   },
   afterTest: async function afterTest(test, context, { error }) {
     if (error) {

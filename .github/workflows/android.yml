@@ -13,7 +13,7 @@ permissions:
 jobs:
   appium-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -40,18 +40,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Download test APK
-        run: npm run app:download
-
-      - name: Run Appium suite on Android emulator
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Restore managed Android cache
+        uses: actions/cache@v4
         with:
-          api-level: 35
-          arch: x86_64
-          profile: pixel_7
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: npm run test:ci
+          path: |
+            .cache/android-sdk
+            .cache/android-avd
+            .cache/downloads
+            .cache/apps
+          key: managed-android-${{ runner.os }}-${{ hashFiles('package-lock.json', 'scripts/android-tooling.mjs', 'scripts/run-local.mjs', 'scripts/ensure-app.mjs') }}
+
+      - name: Prepare managed Android environment
+        run: npm run android:setup
+
+      - name: Verify Android environment
+        run: npm run doctor:android
+
+      - name: Run Appium suite
+        run: npm run test:ci
 
       - name: Upload artifacts
         if: always()

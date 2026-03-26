@@ -5,9 +5,9 @@ const viewsPage = {
 
   elements: {
     list: {
-      animationItem: () => viewsPage.waitForText("1. Animation"),
-      buttonsItem: () => viewsPage.waitForText("1. Buttons"),
-      controlsItem: () => viewsPage.waitForText("1. Theme White"),
+      animationItem: () => viewsPage.waitForText("Animation"),
+      buttonsItem: () => viewsPage.waitForText("Buttons"),
+      controlsItem: () => viewsPage.waitForText("Controls"),
     },
   },
 
@@ -17,11 +17,11 @@ const viewsPage = {
   },
 
   async openButtons() {
-    await this.tapText("1. Buttons");
+    await this.tapText("Buttons");
   },
 
   async openControls() {
-    await this.tapText("1. Theme White");
+    await this.tapText("Controls");
   },
 };
 

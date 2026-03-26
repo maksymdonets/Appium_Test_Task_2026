@@ -22,55 +22,110 @@ Production-ready Appium + WebdriverIO suite for the Android `ApiDemos-debug.apk`
 ## Local prerequisites
 
 - Node.js 20.18.1+
-- Android SDK with:
-  - `platform-tools`
-  - `emulator`
-  - at least one bootable Android emulator
 - Java 17+ available for Android tooling
 
-## Local run
+## Local bootstrap
+
+Install dependencies once:
 
 ```bash
 npm install
+```
+
+Prepare the local Android tooling cache:
+
+```bash
+npm run android:setup
+```
+
+That command downloads and caches everything the project needs:
+
+- `.cache/apps/ApiDemos-debug.apk`
+- `.cache/android-sdk`
+- `.cache/android-avd`
+- `.cache/downloads`
+
+Validate the setup:
+
+```bash
 npm run doctor:android
+```
+
+## Local commands
+
+Open a visible emulator window:
+
+```bash
+npm run android:emulator
+```
+
+Open a headless emulator:
+
+```bash
+npm run android:emulator:headless
+```
+
+Stop a running emulator:
+
+```bash
+npm run android:kill
+```
+
+Run the full suite with the emulator visible:
+
+```bash
 npm test
 ```
 
-Useful commands:
+Run the full suite headless:
 
 ```bash
-npm run app:download
+npm run test:headless
+```
+
+Run only the smoke navigation test:
+
+```bash
 npm run test:smoke
+```
+
+Run the smoke test headless:
+
+```bash
+npm run test:smoke:headless
+```
+
+Generate the Allure report:
+
+```bash
 npm run report:allure
 ```
 
-The APK is downloaded once into `.cache/apps/ApiDemos-debug.apk`.
+## Recommended local flow
 
-## Android SDK setup
-
-If `npm run doctor:android` reports missing `adb` or `emulator`, your SDK path is either absent or points to a dead directory.
-
-Typical fix:
+First run on a clean machine:
 
 ```bash
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export ADB_BINARY="$ANDROID_HOME/platform-tools/adb"
-export EMULATOR_BINARY="$ANDROID_HOME/emulator/emulator"
-export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
-```
-
-Then rerun:
-
-```bash
+npm install
+npm run android:setup
 npm run doctor:android
+npm run android:emulator
+npm test
 ```
 
-If that directory does not exist on your machine, install Android Studio plus:
+Fast headless run:
 
-- Android SDK Platform-Tools
-- Android Emulator
-- at least one Android system image and AVD
+```bash
+npm run test:headless
+```
+
+If the emulator is already running, the project reuses it. If it is missing, the project boots it automatically.
+
+## Android SDK behavior
+
+The project prefers a valid machine SDK if one already exists. If not, it falls back to the managed SDK under `.cache/android-sdk`.
+
+You do not need to export `ANDROID_HOME`, `ANDROID_SDK_ROOT`, `ADB_BINARY`, or `EMULATOR_BINARY` for normal project usage. The local runner sets them for you.
 
 ## Environment overrides
 
@@ -80,6 +135,7 @@ The suite can be tuned without code edits:
 - `APPIUM_PORT`
 - `ANDROID_HOME`
 - `ANDROID_SDK_ROOT`
+- `ANDROID_AVD_HOME`
 - `ANDROID_DEVICE_NAME`
 - `ANDROID_PLATFORM_VERSION`
 - `ANDROID_AVD_NAME`
@@ -89,14 +145,15 @@ The suite can be tuned without code edits:
 
 ## CI
 
-[`android.yml`](./.github/workflows/android.yml) uses GitHub Actions plus `reactivecircus/android-emulator-runner` to:
+[`android.yml`](./.github/workflows/android.yml) uses the same repository-local bootstrap flow as local execution:
 
 1. install Node and Java
 2. install project dependencies
-3. download the APK
-4. boot an Android emulator
-5. run the Appium suite
-6. upload artifacts from `artifacts/`
+3. restore or build the managed Android SDK and AVD cache
+4. run `npm run android:setup`
+5. run `npm run doctor:android`
+6. run `npm run test:ci`
+7. upload artifacts from `artifacts/`
 
 ## Artifacts
 
@@ -109,5 +166,5 @@ On failure the suite stores:
 
 ## Notes
 
-- `browser.reset()` is executed before every test for isolation.
-- The test repository stays clean because the app binary is downloaded at runtime.
+- The suite restarts the target activity before each test for isolation.
+- The test repository stays clean because the app binary and managed Android tooling are downloaded at runtime into `.cache/`.
