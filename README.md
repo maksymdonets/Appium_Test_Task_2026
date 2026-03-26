@@ -13,12 +13,10 @@ Production-ready Appium + WebdriverIO suite for the Android `ApiDemos-debug.apk`
 
 ## Project structure
 
-- `AGENTS.md` - local repository agent operating model
 - `src/config/environment.js` - runtime configuration and binary resolution
 - `src/pages/` - object-style page objects with `routes`, `elements`, and methods on `this`
 - `src/support/` - APK/bootstrap/artifact helpers
 - `test/*.spec.js` - business-readable test scenarios
-- `skills/` - local-only agent skills and manifests
 - `.github/workflows/android.yml` - CI pipeline for GitHub Actions
 
 ## Local prerequisites
@@ -48,15 +46,45 @@ npm run report:allure
 
 The APK is downloaded once into `.cache/apps/ApiDemos-debug.apk`.
 
+## Android SDK setup
+
+If `npm run doctor:android` reports missing `adb` or `emulator`, your SDK path is either absent or points to a dead directory.
+
+Typical fix:
+
+```bash
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export ADB_BINARY="$ANDROID_HOME/platform-tools/adb"
+export EMULATOR_BINARY="$ANDROID_HOME/emulator/emulator"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+```
+
+Then rerun:
+
+```bash
+npm run doctor:android
+```
+
+If that directory does not exist on your machine, install Android Studio plus:
+
+- Android SDK Platform-Tools
+- Android Emulator
+- at least one Android system image and AVD
+
 ## Environment overrides
 
 The suite can be tuned without code edits:
 
 - `APPIUM_BINARY`
 - `APPIUM_PORT`
+- `ANDROID_HOME`
+- `ANDROID_SDK_ROOT`
 - `ANDROID_DEVICE_NAME`
 - `ANDROID_PLATFORM_VERSION`
 - `ANDROID_AVD_NAME`
+- `ADB_BINARY`
+- `EMULATOR_BINARY`
 - `WDIO_LOG_LEVEL`
 
 ## CI
@@ -83,4 +111,3 @@ On failure the suite stores:
 
 - `browser.reset()` is executed before every test for isolation.
 - The test repository stays clean because the app binary is downloaded at runtime.
-- Agent instructions and AI-related manifests are local to the repository; no cloud AI integration is required by this project.
