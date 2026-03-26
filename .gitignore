@@ -1,0 +1,9 @@
+node_modules/
+.cache/
+artifacts/
+allure-report/
+*.log
+.DS_Store
+AGENTS.md
+**/AGENTS.override.md
+skills/

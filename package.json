@@ -1,0 +1,30 @@
+{
+  "name": "appium-test-task-2026",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "scripts": {
+    "app:download": "node ./scripts/ensure-app.mjs",
+    "doctor:android": "node ./scripts/doctor-android.mjs",
+    "pretest": "node ./scripts/ensure-app.mjs",
+    "test": "wdio run ./wdio.conf.js",
+    "test:ci": "wdio run ./wdio.conf.js",
+    "test:smoke": "wdio run ./wdio.conf.js --spec ./test/navigation.spec.js",
+    "report:allure": "allure generate ./artifacts/allure-results --clean -o ./artifacts/allure-report"
+  },
+  "devDependencies": {
+    "@wdio/allure-reporter": "^9.1.0",
+    "@wdio/appium-service": "^9.1.0",
+    "@wdio/cli": "^9.1.0",
+    "@wdio/junit-reporter": "^9.1.0",
+    "@wdio/local-runner": "^9.1.0",
+    "@wdio/mocha-framework": "^9.1.0",
+    "@wdio/spec-reporter": "^9.1.0",
+    "allure-commandline": "^2.34.1",
+    "appium": "^2.5.4",
+    "appium-uiautomator2-driver": "^3.8.0"
+  }
+}
